@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,14 +29,19 @@ public class MainActivity extends AppCompatActivity {
     Handler handler = new Handler();
     int i = 0;
     ArrayList<Uri> arrayList = new ArrayList<Uri>();
-    ImageView imageView = (ImageView) findViewById(R.id.imageView);
+    ImageView imageView;
+    ImageView imageView2;
+    Button button2;
+    boolean start;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView2 = (ImageView) findViewById(R.id.icon);
         Button button1 = (Button) findViewById(R.id.back);
-        Button button2 = (Button) findViewById(R.id.saisei);
+        button2 = (Button) findViewById(R.id.saisei);
         Button button3 = (Button) findViewById(R.id.step);
 
 
@@ -47,16 +53,63 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (timer == null) {
+                    start = true;
+                    button2.setText("一時停止");
+                    timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    int j = i % 3;
+                                    imageView.setImageURI(arrayList.get(j));
+                                    i++;
+                                }
+                            });
+                        }
+                    }, 100, 2000);
 
+
+                } else {
+                    button2.setText("再生");
+                    timer.cancel();
+                    timer = null;
+                    i--;
+                    start=false;
+                }
 
             }
         });
 
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (start == false) {
+                    i = i + 2;
+                    int j = i % 3;
+                    imageView.setImageURI(arrayList.get(j));
 
+                }
+
+            }
+        });
+
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (start == false) {
+                    i = i + 4;
+                    int j = i % 3;
+                    imageView.setImageURI(arrayList.get(j));
+                }
+
+            }
+        });
 
 
     }
@@ -82,12 +135,8 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 null,
                 null
-
         );
-
         if (cursor.moveToFirst()) {
-
-
             Uri imageUri;
             do {
                 int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
@@ -95,33 +144,8 @@ public class MainActivity extends AppCompatActivity {
                 imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
                 arrayList.add(imageUri);
                 Log.d("test", "URI" + imageUri.toString());
-
-
             } while (cursor.moveToNext());
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-
-
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            int j = i % 3;
-
-                            imageView.setImageURI(arrayList.get(j));
-                            i++;
-
-                        }
-                    });
-                }
-            }, 100, 2000);
-
-
         }
         cursor.close();
     }
-
-
 }

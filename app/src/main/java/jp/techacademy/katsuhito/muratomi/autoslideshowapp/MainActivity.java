@@ -23,7 +23,6 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private static final int PERMISSIONS_REQUES_CODE = 100;
     Timer timer;
     Handler handler = new Handler();
@@ -44,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
         button2 = (Button) findViewById(R.id.saisei);
         Button button3 = (Button) findViewById(R.id.step);
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 getContentsInfo();
+
             } else {
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUES_CODE);
             }
@@ -56,31 +55,34 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (timer == null) {
-                    start = true;
-                    button2.setText("一時停止");
-                    timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    int j = i % 3;
-                                    imageView.setImageURI(arrayList.get(j));
-                                    i++;
-                                }
-                            });
-                        }
-                    }, 100, 2000);
+                if (arrayList.size() != 0) {
 
+                    if (timer == null) {
+                        start = true;
+                        button2.setText("一時停止");
+                        timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                } else {
-                    button2.setText("再生");
-                    timer.cancel();
-                    timer = null;
-                    i--;
-                    start=false;
+                                        int j = i % 3;
+                                        imageView.setImageURI(arrayList.get(j));
+                                        i++;
+                                    }
+                                });
+                            }
+                        }, 100, 2000);
+                    } else {
+                        button2.setText("再生");
+                        timer.cancel();
+                        timer = null;
+                        i--;
+                        start = false;
+                    }
+
                 }
 
             }
@@ -89,23 +91,27 @@ public class MainActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (start == false) {
-                    i = i + 2;
-                    int j = i % 3;
-                    imageView.setImageURI(arrayList.get(j));
-
+                if (arrayList.size() != 0) {
+                    if (start == false) {
+                        i = i + 2;
+                        int j = i % 3;
+                        Log.d("test", String.valueOf(arrayList.size()));
+                        imageView.setImageURI(arrayList.get(j));
+                    }
                 }
-
             }
         });
 
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (start == false) {
-                    i = i + 4;
-                    int j = i % 3;
-                    imageView.setImageURI(arrayList.get(j));
+                if (arrayList.size() != 0) {
+                    if (start == false) {
+                        i = i + 4;
+                        int j = i % 3;
+                        imageView.setImageURI(arrayList.get(j));
+                    }
+
                 }
 
             }

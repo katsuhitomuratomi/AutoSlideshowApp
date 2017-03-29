@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -26,19 +27,20 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUES_CODE = 100;
     Timer timer;
     Handler handler = new Handler();
-    int i = 0;
     ArrayList<Uri> arrayList = new ArrayList<Uri>();
     ImageView imageView;
     ImageView imageView2;
     Button button2;
     boolean start;
+    int picnum=0;
+    float kaiten=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = (ImageView) findViewById(R.id.imageView);
-        imageView2 = (ImageView) findViewById(R.id.icon);
+        imageView2=(ImageView)findViewById(R.id.icon);
         Button button1 = (Button) findViewById(R.id.back);
         button2 = (Button) findViewById(R.id.saisei);
         Button button3 = (Button) findViewById(R.id.step);
@@ -68,9 +70,11 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
 
-                                        int j = i % 3;
-                                        imageView.setImageURI(arrayList.get(j));
-                                        i++;
+                                        ViewPropertyAnimator animator=imageView2.animate();
+                                        animator.setDuration(2000);
+                                        animator.rotation(360f*kaiten);
+                                       movenum(1);
+                                        kaiten++;
                                     }
                                 });
                             }
@@ -79,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                         button2.setText("再生");
                         timer.cancel();
                         timer = null;
-                        i--;
                         start = false;
                     }
 
@@ -93,10 +96,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (arrayList.size() != 0) {
                     if (start == false) {
-                        i = i + 2;
-                        int j = i % 3;
-                        Log.d("test", String.valueOf(arrayList.size()));
-                        imageView.setImageURI(arrayList.get(j));
+                        movenum(-1);
                     }
                 }
             }
@@ -107,9 +107,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (arrayList.size() != 0) {
                     if (start == false) {
-                        i = i + 4;
-                        int j = i % 3;
-                        imageView.setImageURI(arrayList.get(j));
+                       movenum(1);
                     }
 
                 }
@@ -117,7 +115,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if(arrayList.size()!=0){
+            imageView.setImageURI(arrayList.get(0));
+        }
 
+
+    }
+
+    public  void  movenum(int move){
+        picnum=picnum+move;
+        if(picnum>=arrayList.size()){
+            picnum=0;
+        }else if(picnum<0){
+            picnum=arrayList.size()-1;
+        }
+        imageView.setImageURI(arrayList.get(picnum));
     }
 
     @Override

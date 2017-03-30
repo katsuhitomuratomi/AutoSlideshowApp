@@ -1,39 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+
+    android:background="@android:color/black"
     tools:context="jp.techacademy.katsuhito.muratomi.autoslideshowapp.MainActivity">
 
-   <ImageView
-       android:id="@+id/imageView"
-       android:layout_centerInParent="true"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content" />
-   <LinearLayout
-       android:orientation="horizontal"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
-      <Button
-          android:id="@+id/back"
-          android:text="戻る"
-          android:layout_weight="1"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
-      <Button
-          android:id="@+id/saisei"
-          android:text="再生/一時停止"
-          android:layout_weight="1"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
-      <Button
-          android:id="@+id/step"
-          android:text="進む"
-          android:layout_weight="1"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
-   </LinearLayout>
+    <ImageView
 
-</LinearLayout>
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/saisei"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_launcher" />
+
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="戻る" />
+
+    <Button
+        android:id="@+id/saisei"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="再生" />
+
+    <Button
+        android:id="@+id/step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="進む" />
+
+
+</RelativeLayout>
